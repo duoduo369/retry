@@ -1,25 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
-retry是为了做方法重试的一个东西
-useage:
-    from retry import FunctionCallRecord
-
-    func_record = FunctionCallRecord()
-
-    for i in xrange(times):
-        try:
-            your_func_call(arg1, kwarg1='kwarg1_xxx')
-        except:
-            func_record.recording('special_op_name', your_func_call, [arg1], {'kwarg1':'kwarg1_xxx'})
-            some_exception_handle()
-
-    def handle_exception(exc):
-        if isinstance(exc, SomeException):
-            some_exception_handle()
-        ...
-    func_record.retry('special_op_name', handle_exception, retry_times=5)
-'''
 import unittest
 
 from retry import FunctionCallRecord

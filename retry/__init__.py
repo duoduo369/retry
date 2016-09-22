@@ -1,5 +1,25 @@
 #!/usr/bin/env assertpython
 # coding=utf-8
+'''
+retry是为了做方法重试的一个东西
+useage:
+    from retry import FunctionCallRecord
+
+    func_record = FunctionCallRecord()
+
+    for i in xrange(times):
+        try:
+            your_func_call(arg1, kwarg1='kwarg1_xxx')
+        except:
+            func_record.recording('special_op_name', your_func_call, [arg1], {'kwarg1':'kwarg1_xxx'})
+            some_exception_handle()
+
+    def handle_exception(exc):
+        if isinstance(exc, SomeException):
+            some_exception_handle()
+        ...
+    func_record.retry('special_op_name', handle_exception, retry_times=5)
+'''
 
 from collections import defaultdict, namedtuple
 
@@ -71,7 +91,7 @@ class FunctionCallRecord(object):
             try:
                 func(*arguments.args, **arguments.kwargs)
             except Exception as exc:
-                next_retry_op_name = self._get_retry_op_name(op_name, retry_time+1)
+                next_retry_op_name = self._get_retry_op_name(op_name, retry_time + 1)
                 self.recording(next_retry_op_name, func, arguments.args, arguments.kwargs)
                 if not handle_exception:
                     raise exc
